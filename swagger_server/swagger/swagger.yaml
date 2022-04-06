@@ -1,0 +1,464 @@
+swagger: '2.0'
+info:
+  version: 1.0.0
+  title: django backend API
+# host: 127.0.0.1:8000
+# schemes:
+#   - http
+consumes:
+  - application/json
+produces:
+  - application/json
+paths:
+  /api/accept_invite/{company_name}/:
+    patch:
+      tags:
+        - organization
+      description: 用户接受某个公司的邀请
+      operationId: api_accept_invite_partial_update
+      parameters:
+        - name: company_name
+          in: path
+          required: true
+          type: string
+      responses:
+        '200':
+          description: ''
+      x-swagger-router-controller: swagger_server.controllers.api_controller
+  /api/company/:
+    get:
+      tags:
+        - organization
+      description: 获取用户当前所在的公司的公司信息
+      operationId: api_self_get_company
+      parameters: []
+      responses:
+        '200':
+          description: ''
+      x-swagger-router-controller: swagger_server.controllers.api_controller
+    post:
+      tags:
+        - organization
+      summary: 增加公司
+      description: 登录用户并且有Company模型的add权限
+      operationId: api_new_company
+      parameters: []
+      responses:
+        '200':
+          description: ''
+      x-swagger-router-controller: swagger_server.controllers.api_controller
+    patch:
+      tags:
+        - organization
+      description: 修改用户当前所在公司的公司信息
+      operationId: api_change_company
+      parameters: []
+      responses:
+        '200':
+          description: ''
+      x-swagger-router-controller: swagger_server.controllers.api_controller
+  /api/company/{company_name}/:
+    get:
+      tags:
+        - organization
+      description: 获取公司信息
+      operationId: api_company_read
+      parameters:
+        - name: company_name
+          in: path
+          required: true
+          type: string
+      responses:
+        '200':
+          description: ''
+      x-swagger-router-controller: swagger_server.controllers.api_controller
+  /api/department/:
+    post:
+      tags:
+        - organization
+      summary: 增加部门
+      description: '请求格式 {''department'': {''name'': ...}}'
+      operationId: api_department_create
+      parameters: []
+      responses:
+        '201':
+          description: ''
+      x-swagger-router-controller: swagger_server.controllers.api_controller
+  /api/invite/{username}/:
+    patch:
+      tags:
+        - organization
+      summary: 邀请某个用户加入公司
+      description: '# 需要本用户有 can_invite_people 权限'
+      operationId: api_invite_partial_update
+      parameters:
+        - name: username
+          in: path
+          required: true
+          type: string
+      responses:
+        '200':
+          description: ''
+      x-swagger-router-controller: swagger_server.controllers.api_controller
+  /api/organization/:
+    get:
+      tags:
+        - organization
+      description: 查看自己的组织信息
+      operationId: api_organization_list
+      parameters: []
+      responses:
+        '200':
+          description: ''
+      x-swagger-router-controller: swagger_server.controllers.api_controller
+  /api/organization/{username}/:
+    get:
+      tags:
+        - organization
+      summary: 查看其他用户的组织信息
+      description: 只有本公司内才能查看
+      operationId: api_organization_read
+      parameters:
+        - name: username
+          in: path
+          required: true
+          type: string
+      responses:
+        '200':
+          description: ''
+      x-swagger-router-controller: swagger_server.controllers.api_controller
+    patch:
+      tags:
+        - organization
+      summary: 修改其他用户的组织信息
+      description: 相同公司 需要有Organization模型的change权限
+      operationId: api_organization_partial_update
+      parameters:
+        - name: username
+          in: path
+          required: true
+          type: string
+      responses:
+        '200':
+          description: ''
+      x-swagger-router-controller: swagger_server.controllers.api_controller
+  /api/organization/{username}/roles/add/{role_name}/:
+    post:
+      tags:
+        - organization
+      description: 将用户添加进某个角色
+      operationId: api_organization_roles_add_create
+      parameters:
+        - name: role_name
+          in: path
+          required: true
+          type: string
+        - name: username
+          in: path
+          required: true
+          type: string
+      responses:
+        '201':
+          description: ''
+      x-swagger-router-controller: swagger_server.controllers.api_controller
+  /api/organization/{username}/roles/remove/{role_name}/:
+    post:
+      tags:
+        - organization
+      description: 将用户移除出某个角色
+      operationId: api_organization_roles_remove_create
+      parameters:
+        - name: role_name
+          in: path
+          required: true
+          type: string
+        - name: username
+          in: path
+          required: true
+          type: string
+      responses:
+        '201':
+          description: ''
+      x-swagger-router-controller: swagger_server.controllers.api_controller
+  /api/profiles/{username}/:
+    get:
+      tags:
+        - authentication
+      summary: 查看其他用户的档案信息
+      description: 相同的公司内部成员可以彼此查看档案信息
+      operationId: api_profiles_read
+      parameters:
+        - name: username
+          in: path
+          required: true
+          type: string
+      responses:
+        '200':
+          description: ''
+      x-swagger-router-controller: swagger_server.controllers.api_controller
+  /api/role/:
+    post:
+      tags:
+        - organization
+      description: 增加一个新的角色
+      operationId: api_role_create
+      parameters: []
+      responses:
+        '201':
+          description: ''
+      x-swagger-router-controller: swagger_server.controllers.api_controller
+  /api/role/{role_id}/add-permission/:
+    post:
+      tags:
+        - organization
+      summary: 角色增加权限
+      description: |-
+        {
+            'model': 'app_label.model_name'
+        }
+      operationId: api_role_add_permission_create
+      parameters:
+        - name: role_id
+          in: path
+          required: true
+          type: string
+      responses:
+        '201':
+          description: ''
+      x-swagger-router-controller: swagger_server.controllers.api_controller
+  /api/role/{role_id}/remove-permission/:
+    post:
+      tags:
+        - organization
+      description: ''
+      operationId: api_role_remove_permission_create
+      parameters:
+        - name: role_id
+          in: path
+          required: true
+          type: string
+      responses:
+        '201':
+          description: ''
+      x-swagger-router-controller: swagger_server.controllers.api_controller
+  /api/upload-file/{filename}/:
+    put:
+      tags:
+        - core
+      description: wb+ put 文件新建或者替换模式
+      operationId: api_upload_file_update
+      consumes: []
+      parameters:
+        - name: filename
+          in: path
+          required: true
+          type: string
+      responses:
+        '200':
+          description: ''
+      x-swagger-router-controller: swagger_server.controllers.api_controller
+  /api/upload-image/{filename}/:
+    put:
+      tags:
+        - core
+      description: ''
+      operationId: api_upload_image_update
+      consumes: []
+      parameters:
+        - name: filename
+          in: path
+          required: true
+          type: string
+      responses:
+        '200':
+          description: ''
+      x-swagger-router-controller: swagger_server.controllers.api_controller
+  /api/user/:
+    get:
+      tags:
+        - authentication
+      summary: 用户获取自己的一些信息
+      description: 也包括自己的档案信息和组织信息
+      operationId: api_user_list
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          schema:
+            type: object
+            properties:
+              user:
+                type: object
+                properties:
+                  username:
+                    type: string
+                  email:
+                    type: string
+                  token:
+                    type: string
+                  profile:
+                    type: object
+                  organization:
+                    type: object
+      x-swagger-router-controller: swagger_server.controllers.api_controller
+    patch:
+      tags:
+        - authentication
+      summary: 用户修改自己的信息和档案信息
+      description: 不能修改自己的组织信息，不能修改手机号码
+      operationId: api_user_partial_update
+      parameters:
+        - in: body
+          name: user
+          description: user info to patch.
+          schema:
+            type: object
+            properties:
+              user:
+                type: object
+                properties:
+                  username:
+                    type: string
+                  password:
+                    type: string
+                  profile:
+                    type: object
+      responses:
+        '200':
+          description: ''
+          schema:
+            type: object
+            properties:
+              user:
+                type: object
+                properties:
+                  username:
+                    type: string
+                  email:
+                    type: string
+                  token:
+                    type: string
+                  profile:
+                    type: object
+                  organization:
+                    type: object
+      x-swagger-router-controller: swagger_server.controllers.api_controller
+  /api/user/login/:
+    post:
+      tags:
+        - authentication
+      summary: 用户登录
+      description: 任何人都可以访问。用户名或邮箱必须提供一个
+      operationId: api_user_login_create
+      parameters:
+        - in: body
+          name: user
+          description: The user to login.
+          schema:
+            type: object
+            properties:
+              user:
+                type: object
+                properties:
+                  username:
+                    type: string
+                  password:
+                    type: string
+                required: [password]
+      responses:
+        '200':
+          description: 'OK'
+          schema:
+            type: object
+            properties:
+              user:
+                type: object
+                properties:
+                  username:
+                    type: string
+                  email:
+                    type: string
+                  token:
+                    type: string
+      x-swagger-router-controller: swagger_server.controllers.api_controller
+  /api/user/phone-login/:
+    post:
+      tags:
+        - authentication
+      summary: 手机登录附带自动注册过程
+      description: 任何人都可以访问
+      operationId: api_user_phone_login_create
+      parameters:
+        - in: body
+          name: user
+          description: The user to phone-login
+          schema:
+            type: object
+            required:
+              - user
+            properties:
+              user:
+                type: object
+                properties:
+                  phone:
+                    type: string
+                  biz_id:
+                    type: string
+                  verification_code:
+                    type: string
+                  send_date:
+                    type: string
+                    example: "20220329"
+      responses:
+        '201':
+          description: 'OK'
+          schema:
+            type: object
+            properties:
+              user:
+                type: object
+                properties:
+                  phone:
+                    type: string
+                  token:
+                    type: string
+      x-swagger-router-controller: swagger_server.controllers.api_controller
+  /api/user/registration/:
+    post:
+      tags:
+        - authentication
+      summary: 用户名传统注册
+      description: 任何人都可以注册 用户名和邮箱必须有一个
+      operationId: api_user_registration_create
+      parameters:
+        - in: body
+          name: user
+          description: The user to create.
+          schema:
+            type: object
+            required:
+              - user
+            properties:
+              user:
+                type: object
+                properties:
+                  username:
+                    type: string
+                  password:
+                    type: string
+      responses:
+        '201':
+          description: '创建成功'
+          schema:
+            type: object
+            properties:
+              user:
+                type: object
+                properties:
+                  username:
+                    type: string
+                  email:
+                    type: string
+                  token:
+                    type: string
+      x-swagger-router-controller: swagger_server.controllers.api_controller

@@ -1,0 +1,1 @@
+./source/pgsql/bin/pg_ctl -D ./pgdata -l logfile start

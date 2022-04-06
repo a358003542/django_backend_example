@@ -1,0 +1,3 @@
+mkdocs
+connexion[swagger-ui]
+python_dateutil

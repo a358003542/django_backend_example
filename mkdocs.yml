@@ -1,0 +1,8 @@
+site_name: django backend
+dev_addr: localhost:8002
+nav:
+  - Home: 'README.md'
+  - 'authentication.md'
+  - '异常信息.md'
+  - '权限控制.md'
+theme: readthedocs
